@@ -1,4 +1,4 @@
-# Welcome to Advanced Angular.js!
+# Welcome to Comprehensive Angular.js!
 
 ## Class Information
 
