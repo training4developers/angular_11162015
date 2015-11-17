@@ -1,0 +1,19 @@
+<h1>Home</h1>
+<nav ng-include="'/tpls/menu.html'"></nav>
+
+<table>
+	<thead>
+		<tr>
+			<td>Id</td>
+			<td>Name</td>
+			<td>Action</td>
+		</tr>
+	</thead>
+	<tbody>
+		<tr ng-repeat="widget in widgets">
+			<td>{{widget.id}}</td>
+			<td>{{widget.name}}</td>
+			<td><a ui-sref="edit({ widgetId: widget.id })">Edit</td>
+		</tr>
+	</tbody>
+</table>

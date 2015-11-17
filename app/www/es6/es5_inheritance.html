@@ -1,0 +1,40 @@
+<script>
+
+	"use strict";
+
+	function Person(firstName, lastName) {
+		this.firstName = firstName;
+		this.lastName = lastName;
+	}
+
+	Person.prototype.getFullName = function() {
+		return this.firstName + " " + this.lastName;
+	}
+
+	function Employee(empId, firstName, lastName) {
+		this._super.call(this, firstName, lastName);
+		this.empId = empId;
+	}
+
+	Employee.prototype = Object.create(Person.prototype);
+	Employee.prototype.constructor = Employee;
+	Employee.prototype._super = Person;
+
+	Employee.prototype.getEmpInfo = function() {
+		return this.empId + " " + this.lastName + ", " +  this.firstName;
+	}
+
+	var p = new Person("Bob", "Smith");
+	console.log(p.getFullName());
+
+	var e = new Employee(1, "Bob", "Smith");
+	console.log(e.getEmpInfo());
+
+	console.dir(Person);
+	console.dir(p);
+
+	console.dir(Employee);
+	console.dir(e);
+
+
+</script>
