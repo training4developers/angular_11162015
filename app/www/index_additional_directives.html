@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+		<title>Welcome to Angular.js</title>
+		<script src="/libs/jquery/dist/jquery.js"></script>
+		<script src="/libs/angular/angular.js"></script>
+	</head>
+
+	<body>
+
+		<div ng-app="MyApp">
+			<div ng-controller="MyCtrl">
+
+				Show Me <input ng-model="showMe" type="checkbox">
+				<div ng-if="showMe">You can see me!</div>
+				<br><br>
+
+				<select ng-model="insuranceProduct"
+					ng-options="ip.code as ip.label for ip in insuranceProducts">
+					<option value="">Select One...</option>
+				</select>
+
+				<div ng-switch on="insuranceProduct">
+					<div ng-switch-when="hostage-taking-coverage">
+						<h1>Hostage Taking Coverage</h1>
+					</div>
+					<div ng-switch-when="jet-coverage">
+						<h1>Jet Coverage</h1>
+					</div>
+					<div ng-switch-when="game-show-coverage">
+						<h1>Game Show Coverage</h1>
+					</div>
+					<div ng-switch-when="blizzard-coverage">
+						<h1>Blizzard Coverage</h1>
+					</div>
+					<div ng-switch-default>
+						Select Coverage...
+					</div>
+				</div>
+
+			</div>
+		</div>
+
+		<script>
+
+			angular.module("MyApp", [])
+				.controller("MyCtrl", function($scope) {
+
+					$scope.insuranceProducts = [
+						{ code: "hostage-taking-coverage", label: "Hostage Taking Coverage" },
+						{ code: "jet-coverage", label: "Jet Coverage" },
+						{ code: "game-show-coverage", label: "Game Show Coverage" },
+						{ code: "blizzard-coverage", label: "Blizzard Coverage" }
+					];
+				});
+
+		</script>
+
+	</body>
+
+</html>

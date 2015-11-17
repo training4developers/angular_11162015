@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+		<title>Welcome to Angular.js</title>
+		<script src="/libs/jquery/dist/jquery.js"></script>
+		<script src="/libs/angular/angular.js"></script>
+	</head>
+
+	<body>
+
+		<div ng-app="MyApp">
+			<div ng-controller="MyCtrl">
+				{{message}}
+			</div>
+		</div>
+
+		<script>
+
+			myCtrl.$inject = ["$log", "$scope"];
+
+			function myCtrl(l, s) {
+
+				l.log("some data for the console...");
+				s.message = "We love The Hartford!";
+
+			}
+
+			angular.module("MyApp", [])
+				.controller("MyCtrl", myCtrl);
+
+		</script>
+
+	</body>
+
+</html>

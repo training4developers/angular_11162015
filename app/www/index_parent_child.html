@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+		<title>Welcome to Angular.js</title>
+		<script src="/libs/jquery/dist/jquery.js"></script>
+		<script src="/libs/angular/angular.js"></script>
+		<style>
+
+			.ng-scope {
+				border:1px solid green;
+				margin:5px;
+				padding:5px;
+			}
+
+		</style>
+	</head>
+
+	<body>
+
+		<div ng-app="MyApp">
+			<div ng-controller="ParentCtrl">
+				Show Me <input type="checkbox" ng-model="showMe"><br>
+				Parent Amount: {{foo.amount}}<br>
+				Parent Amount: <input ng-model="foo.amount">
+				<div ng-if="showMe">
+					Child Amount: {{foo.amount}}<br>
+					Child Amount: <input ng-model="foo.amount">
+				</div>
+			</div>
+		</div>
+
+		<script>
+
+			angular.module("MyApp", [])
+				.controller("ParentCtrl", function($scope) {
+					//$scope.foo = {};
+				})
+				.controller("ChildCtrl", function() {});
+
+		</script>
+
+	</body>
+
+</html>

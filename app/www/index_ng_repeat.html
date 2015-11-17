@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+		<title>Welcome to Angular.js</title>
+		<script src="/libs/jquery/dist/jquery.js"></script>
+		<script src="/libs/angular/angular.js"></script>
+	</head>
+
+	<body>
+
+		<div ng-app="MyApp">
+			<div ng-controller="MyCtrl">
+
+				Color Filter: <input ng-model="colorFilter">
+
+				<ul>
+					<li ng-repeat="color in colors | filter:colorFilter | orderBy:'toString()':true">{{$index}} {{color | uppercase}} {{$odd}}</li>
+				</ul>
+
+				New Color: <input ng-model="newColor">
+				<button ng-click="addColor()">Add Color</button>
+				<br><br>
+
+				Make Filter: <input ng-model="makeFilter">
+
+				<ul>
+					<li ng-repeat="car in cars | filter:{'make':makeFilter} | orderBy:'year':true">{{$index}} {{car.make}} {{car.model}} {{$odd}}</li>
+				</ul>
+
+			</div>
+		</div>
+
+		<script>
+
+			angular.module("MyApp", [])
+				.controller("MyCtrl", function($scope) {
+					$scope.colors = ["green", "white", "saffron", "red", "blue", "brown", "black", "orange"];
+
+					$scope.cars = [
+						{ make: "BMW", model: "328i", year: 2010 },
+						{ make: "Honda", model: "Civic", year: 2012 },
+						{ make: "Chevrolet", model: "Military D30", year: 1985 },
+						{ make: "Honda", model: "CRV", year: 2011 },
+						{ make: "Honda", model: "Odyssey", year: 2015 }
+					];
+
+					$scope.addColor = function() {
+						$scope.colors.push($scope.newColor);
+						$scope.newColor = "";
+					};
+				});
+
+		</script>
+
+	</body>
+
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+		<title>Welcome to Angular.js</title>
+		<script src="/libs/jquery/dist/jquery.js"></script>
+		<script src="/libs/angular/angular.js"></script>
+	</head>
+
+	<body>
+
+		<div id="myApp">
+			<div ng-controller="MyCtrl">
+				{{message}}
+			</div>
+		</div>
+
+		<div id="myApp2">
+			<div ng-controller="MyCtrl">
+				{{message}}
+			</div>
+		</div>
+
+		<script>
+
+			angular.module("MyApp", [])
+				.controller("MyCtrl", function($scope) {
+					$scope.message = "Good night everyone!";
+				});
+
+			$(function() {
+
+				// run other code before angular.js fires off
+
+				angular.bootstrap($("#myApp"), ["MyApp"]);
+				angular.bootstrap($("#myApp2"), ["MyApp"]);
+
+				console.log(angular.element("#myApp").scope());
+				console.log(angular.element("#myApp2").scope());
+
+			});
+
+		</script>
+
+	</body>
+
+</html>
