@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+
+<html>
+<body>
+	<script>
+
+		var a = {
+			digest: function() {
+				console.log("I am digesting");
+			}
+		};
+
+		var b = Object.create(a);
+		var c = Object.create(b);
+
+		c.digest();
+		console.dir(c);
+
+		function fna() {
+
+			function digest() {
+				console.log("I am digesting too!");
+			}
+
+			return function fnb() {
+
+				return function fnc() {
+
+					return {
+						digest: digest
+					};
+
+				}
+
+
+			}
+
+
+		}
+
+		var j = fna()();
+		console.dir(j);
+
+		var g = j();
+		g.digest();
+
+		console.dir(g);
+
+	</script>
+</body>
+</html>

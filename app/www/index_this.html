@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+
+<html>
+	<body>
+		<script>
+
+			"use strict";
+
+			function myFunc(a, b, c) {
+				console.dir(this);
+				console.log(a,b,c);
+			}
+
+			myFunc();
+
+			var o = {
+				myFunc: myFunc
+			};
+
+			window.myFunc();
+			o.myFunc();
+
+			var newObj = new myFunc();
+
+			myFunc.call({ id: 2 }, 1, 2, 3);
+
+			myFunc.apply({ id: 2 }, [1, 2, 3]);
+
+			var fn = myFunc.bind({ id: 2 });
+			fn();
+
+
+		</script>
+	</body>
+</html>

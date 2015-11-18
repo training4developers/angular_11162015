@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+
+<html>
+<body>
+	<script>
+
+		"use strict";
+
+		var x = 2;
+
+		var square = x => x * x;
+
+		var square = function(x) { return x * x; };
+
+		console.log(square(2));
+
+		var mul = (x,y) => {
+			var t = x * y;
+			return t;
+		};
+
+		console.log(mul(50000,12));
+
+		var tax = mul(50000,12) * 0.97;
+		console.log(tax);
+
+		function myFunc() {
+
+			const URL = "http://www.thehartford.com";
+
+			console.log(URL);
+
+			URL = "http://www.travellers.com";
+
+			if (true) {
+				let x = 8;
+			}
+
+			{
+				var t = 0;
+				console.log(t);
+			}
+
+			console.log(x);
+
+		}
+
+		myFunc();
+
+
+	</script>
+</body>
+</html>

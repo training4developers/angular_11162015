@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+
+	<html>
+
+	<head>
+		<title>Welcome to Angular.js</title>
+		<script src="/libs/jquery/dist/jquery.js"></script>
+		<script src="/libs/angular/angular.js"></script>
+	</head>
+
+	<body>
+
+		<div ng-app="MyApp">
+			<div ng-controller="MyCtrl">
+				<!-- directive: my-dir -->
+				<div my-dir></div>
+			</div>
+		</div>
+
+		<script>
+
+			angular.module("MyApp", [])
+				.directive("myDir", function() {
+
+					return {
+						restrict: "ACE",
+						link: function(scope, element, attrs) {
+							element.html(scope.message);
+							console.log("using comments as directive markers is stupid...");
+						}
+					};
+
+				})
+				.controller("MyCtrl", function($scope) {
+					$scope.message = "Mark is a Rock Star like Britney Spears!";
+				});
+
+		</script>
+
+	</body>
+
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+
+	<html>
+
+	<head>
+		<title>Welcome to Angular.js</title>
+		<script src="/libs/jquery/dist/jquery.js"></script>
+		<script src="/libs/angular/angular.js"></script>
+	</head>
+
+	<body>
+
+		<div ng-app="MyApp">
+			<div ng-controller="MyCtrl">
+				<input ng-model="message"><br>
+				<span mark-is-a-rock-star></span>
+			</div>
+		</div>
+
+		<script>
+
+			angular.module("MyApp", [])
+				.directive("markIsARockStar", function($compile) {
+
+					// directive definition object
+					return {
+						compile: function compile(tElement, tAttrs) {
+
+							return {
+								pre: function preLink(scope, element, attrs) {
+
+								},
+								post: function postLink(scope, element, attrs) {
+
+	 								element.html(scope.message);
+
+	 								scope.$watch("message", function(newValue) {
+	 									element.html(newValue);
+	 								});
+
+ 								}
+							};
+						}
+
+					};
+
+					// // simple directive
+					// return function postLink(scope, element, attrs) {
+					// 	element.html(scope.message);
+					//
+					// 	scope.$watch("message", function(newValue) {
+					// 		element.html(newValue);
+					// 	});
+					// }
+
+					// // directive definition object
+					// return {
+					// 	link: function postLink(scope, element, attrs) {
+					// 		element.html(scope.message);
+					//
+					// 		scope.$watch("message", function(newValue) {
+					// 			element.html(newValue);
+					// 		});
+					// 	}
+					//
+					// };
+
+					// // compile ddo
+					// compile: function compile(tElement, tAttrs) {
+					//
+					// 	tElement.append("<div>{{message}}</div>");
+					//
+					//
+					// 	return function postLink(scope, element, attrs) {
+					//
+					// 		var linkingFn = $compile("<div>{{message}}</div>");
+					// 		var domElements = linkingFn(scope);
+					//
+					// 		element.append(domElements);
+					//
+					// 		// element.html(scope.message);
+					// 		//
+					// 		// scope.$watch("message", function(newValue) {
+					// 		// 	element.html(newValue);
+					// 		// });
+					//
+					//
+					// 	};
+					// }
+
+
+				})
+				.controller("MyCtrl", function($scope) {
+					$scope.message = "Mark is a Rock Star like Britney Spears!";
+				});
+
+		</script>
+
+	</body>
+
+</html>

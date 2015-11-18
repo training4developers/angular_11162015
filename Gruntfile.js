@@ -9,9 +9,11 @@ module.exports = function(grunt) {
 
 	grunt.registerTask("default", function() {
 
-		var
+		const
 			http = require("http"),
-			express = require("express"),
+			express = require("express");
+
+		let
 			app = express(),
 			server = http.createServer(app),
 			config = grunt.config();

@@ -12,10 +12,8 @@
 
 		<div ng-app="MyApp">
 			<div ng-controller="MyCtrl">
-				<ul>
-					<li>First</li>
-					<li hig-repeat="color in colors | orderBy:'toString()'">{{color}}</li>
-					<li>Last</li>
+				<ul hig-repeat="color in colors | orderBy:'toString()'">
+					<li>{{color}}</li>
 				</ul>
 			</div>
 		</div>
@@ -26,26 +24,23 @@
 				.directive("higRepeat", function() {
 
 					return {
-						transclude:'element',
+						transclude:true,
 						link: function(scope, element, attrs, ctrl, transclude) {
 
 							var tokens = attrs.higRepeat.split(" ");
 							var itemName = tokens[0];
 							var collectionName = tokens[2];
 							var collectionExpr = tokens.splice(2).join(" ");
-							var listElements = [];
+							var childScopes = [];
 
 							scope.$watchCollection(collectionName, function(newList, oldList, scope) {
 
 								element.empty();
 
-								listElements.forEach(function(listElement) {
-									angular.element(listElement).scope().$destroy();
-									listElement.remove();
+								childScopes.forEach(function(childScope) {
+									childScope.$destroy();
 								});
-								listElements = [];
-
-								var lastElement = element;
+								childScopes =[];
 
 								scope.$eval(collectionExpr).forEach(function(item) {
 
@@ -53,10 +48,10 @@
 									childScope[itemName] = item;
 
 									transclude(childScope, function(clone) {
-										lastElement.after(clone);
-										lastElement = clone;
-										listElements.push(lastElement);
+										element.append(clone);
 									});
+
+									childScopes.push(childScope);
 
 								});
 

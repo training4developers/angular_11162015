@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+		<title>Welcome to Angular.js</title>
+		<script src="/libs/jquery/dist/jquery.js"></script>
+		<script src="/libs/angular/angular.js"></script>
+	</head>
+
+	<body>
+
+		<div ng-app="MyApp">
+			<div ng-controller="MyCtrl">
+				{{message}}
+			</div>
+		</div>
+
+		<script>
+
+			angular.module("MyApp", [])
+				.controller("MyCtrl", function($scope, $timeout, $rootScope) {
+
+					setTimeout(function() {
+
+						//$scope.$apply(function() {
+							$scope.message = "Hi Zane!";
+						//});
+						$scope.$digest();
+
+
+						console.log("timeout expired");
+					},1000);
+
+
+				});
+
+		</script>
+
+	</body>
+
+</html>

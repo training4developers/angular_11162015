@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+
+	<html>
+
+	<head>
+		<title>Welcome to Angular.js</title>
+		<script src="/libs/jquery/dist/jquery.js"></script>
+		<script src="/libs/angular/angular.js"></script>
+	</head>
+
+	<body>
+
+		<div ng-app="MyApp">
+			<div ng-controller="MyCtrl">
+				<div my-dir><p>{{message}}</p></div>
+			</div>
+		</div>
+
+		<script>
+
+			angular.module("MyApp", [])
+				.directive("myDir", function($compile) {
+
+					return {
+						template: "some template message: {{message}}",
+						compile: function(tElement, tAttrs) {
+
+							var tpl = tElement.html();
+							tElement.empty();
+							console.log(tpl);
+
+							return function(scope, element, attrs) {
+
+								function transclude(fn) {
+									var linkingFn = $compile(tpl);
+									var domElement = linkingFn(scope);
+									fn(domElement);
+								}
+
+								transclude(function(clone) {
+									element.append(clone);
+								});
+							};
+						}
+					}
+				})
+				.controller("MyCtrl", function($scope) {
+					$scope.message = "Mark is a Rock Star like Britney Spears!";
+				});
+
+		</script>
+
+	</body>
+
+</html>

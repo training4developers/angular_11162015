@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+
+<html>
+	<body>
+		<script>
+
+			function cool() {
+				t = 50;
+			}
+
+			function outer() {
+
+				var t = 40;
+
+				setTimeout(cool, 1000);
+
+				return function inner() {
+					console.log(t);
+				}
+			}
+
+
+			var myFunc = outer();
+			myFunc();
+
+			setTimeout(function() {
+				myFunc();
+			}, 3000);
+
+
+		</script>
+	</body>
+</html>

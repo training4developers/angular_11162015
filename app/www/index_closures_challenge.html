@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+
+<html>
+	<body>
+		<script>
+
+			var x=0, y=0, funcs=[];
+
+			for (; x<5; x++) {
+				function h(d) {
+					funcs.push(function() {
+						console.log(d);
+					});
+				}
+				h(x);
+			}
+
+			for (; y<5; y++) {
+				funcs[y]();
+			}
+
+		</script>
+	</body>
+</html>
