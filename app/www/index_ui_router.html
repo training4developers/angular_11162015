@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+		<title>Welcome to Angular.js</title>
+		<script src="/libs/jquery/dist/jquery.js"></script>
+		<script src="/libs/angular/angular.js"></script>
+		<script src="/libs/angular-ui-router/release/angular-ui-router.js"></script>
+		<base href="/">
+	</head>
+
+	<body>
+
+		<div ng-app="MyApp">
+			<!-- <script id="menu.html" type="text/ng-template">
+				<ul>
+					<li><a ui-sref="home">Home</a></li>
+					<li><a ui-sref="about">About</a></li>
+				</ul>
+			</script> -->
+			<div ui-view></div>
+		</div>
+
+		<script>
+
+			angular.module("MyApp", ["ui.router"])
+				.factory("Widgets", function() {
+
+					var widgets = [
+						{ id: 1, name: "Test Widget 1" },
+						{ id: 2, name: "Test Widget 2" },
+						{ id: 3, name: "Test Widget 3" }
+					];
+
+					return {
+						getAll: function() {
+							return widgets;
+						},
+						getById: function(widgetId) {
+							return widgets.filter(function(widget) {
+								return widget.id === widgetId;
+							})[0];
+						}
+					}
+
+				})
+				.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
+
+					$urlRouterProvider.otherwise("/");
+
+					$stateProvider
+						.state("home", {
+							url: "/",
+							controller: "HomeCtrl",
+							templateUrl: "/tpls/home.html"
+						})
+						.state("about", {
+							url: "/about",
+							controller: "AboutCtrl",
+							templateUrl: "/tpls/about.html"
+						})
+						.state("edit", {
+							url: "/widgets/:widgetId/edit",
+							controller: "EditWidgetCtrl",
+							templateUrl: "/tpls/widget_edit.html"
+						});
+				})
+				.controller("EditWidgetCtrl", function($scope, $stateParams, Widgets, $state) {
+
+					var
+						widgetId = parseInt($stateParams.widgetId, 10),
+						widget = Widgets.getById(widgetId);
+
+					$scope.widget = angular.extend({}, widget);
+
+					$scope.saveWidget = function() {
+						widget = angular.extend(widget, $scope.widget);
+						$state.go("home");
+					};
+
+					$scope.cancelWidget = function() {
+						$state.go("home");
+
+						$state.go("edit", { widgetId: ? })
+					};
+
+				})
+				.controller("HomeCtrl", function($scope, Widgets) {
+
+					$scope.widgets = Widgets.getAll();
+
+				})
+				.controller("AboutCtrl", function($scope) {
+
+				})
+				.run(function($templateCache, $timeout, $templateRequest) {
+
+					// $templateCache.put("/tpls/about.html",
+					// 	`<h1>About</h1>
+					// 	<nav ng-include="'/tpls/menu.html'"></nav>`
+					// );
+
+					// $templateRequest("/tpls/about.html").then(function(templateString) {
+					// 	console.log("about template was downloaded...");
+					// 	console.log(templateString);
+					// 	console.log($templateCache.get("/tpls/about.html"));
+					// });
+
+					// $timeout(function() {
+					// 	console.log($templateCache.get("/tpls/home.html"));
+					// },1000);
+
+				});
+
+		</script>
+
+	</body>
+
+</html>
