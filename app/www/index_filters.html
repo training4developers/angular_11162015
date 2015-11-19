@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+
+	<html>
+
+	<head>
+		<title>Welcome to Angular.js</title>
+		<script src="/libs/jquery/dist/jquery.js"></script>
+		<script src="/libs/angular/angular.js"></script>
+	</head>
+
+	<body>
+
+		<div ng-app="MyApp">
+			<div ng-controller="MyCtrl">
+				{{message | higUpperCase | higAppend:'!!!!!!!'}}
+
+				<ul>
+					<li ng-repeat="color in colors | strlen:5">{{color}}</li>
+				</ul>
+
+			</div>
+		</div>
+
+		<script>
+
+			angular.module("MyApp", [])
+				.filter("strlen", function() {
+
+					return function(list, minLength,scope) {
+
+						console.dir(scope);
+
+						return list.filter(function(item) {
+							return String(item).length >= minLength;
+						});
+
+					}
+
+				})
+				.filter("higUpperCase", function() {
+
+					return function(value) {
+						return String(value).toUpperCase();
+					};
+
+				})
+				.filter("higAppend", function() {
+					return function(value, strToAppend) {
+						return String(value) + String(strToAppend)
+					};
+				})
+				.controller("MyCtrl", function($scope, $filter) {
+					$scope.message = "Hi Everyone";
+					$scope.colors = ["red","brown","black","blue","green","orange"];
+
+					var higUpperCaseFilter = $filter("higUpperCase");
+					console.log(higUpperCaseFilter("Hi Everyone!"));
+
+				});
+
+		</script>
+
+	</body>
+
+</html>

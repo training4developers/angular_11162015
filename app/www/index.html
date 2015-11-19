@@ -6,9 +6,6 @@
 		<title>Welcome to Angular.js</title>
 		<script src="/libs/jquery/dist/jquery.js"></script>
 		<script src="/libs/angular/angular.js"></script>
-
-		<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
-	  <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 	</head>
 
 	<body>
@@ -16,46 +13,53 @@
 		<div ng-app="MyApp">
 			<div ng-controller="MyCtrl">
 
-				<label for="tags">Tags: </label>
-				<input id="tags">
-
 			</div>
 		</div>
 
 		<script>
 
-			$(function() {
-		    var availableTags = [
-		      "ActionScript",
-		      "AppleScript",
-		      "Asp",
-		      "BASIC",
-		      "C",
-		      "C++",
-		      "Clojure",
-		      "COBOL",
-		      "ColdFusion",
-		      "Erlang",
-		      "Fortran",
-		      "Groovy",
-		      "Haskell",
-		      "Java",
-		      "JavaScript",
-		      "Lisp",
-		      "Perl",
-		      "PHP",
-		      "Python",
-		      "Ruby",
-		      "Scala",
-		      "Scheme"
-		    ];
-		    $( "#tags" ).autocomplete({
-		      source: availableTags
-		    });
-		  });
-
 			angular.module("MyApp", [])
-				.controller("MyCtrl", function($scope, $timeout) {
+				.constant("Url", "http://www.thehartford.com")
+				.factory("Widgets", function(Url) {
+
+					var _widgets = ["Widget 1","Widget 2","Widget 3"];
+
+					return {
+						getAll: function() {
+							console.log(Url);
+							return _widgets;
+						}
+					};
+
+				})
+				.service("Widgets2", function() {
+
+					var _widgets = ["Widget 1","Widget 2","Widget 3"];
+
+					this.getAll = function() {
+						return _widgets;
+					};
+
+				})
+				.config(function($provide) {
+
+					$provide.decorator("$log", function($delegate) {
+
+						var originalLog = $delegate.log;
+
+						$delegate.log = function(msg) {
+							originalLog("MyApp> " + msg);
+						}
+
+						//return $delegate;
+
+					});
+
+
+				})
+				.controller("MyCtrl", function($scope, $filter, Widgets, $log) {
+					console.dir(Widgets.getAll());
+					$log.log("hi everyone!");
 				});
 
 		</script>

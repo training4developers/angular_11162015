@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+
+	<html>
+
+	<head>
+		<title>Welcome to Angular.js</title>
+		<script src="/libs/jquery/dist/jquery.js"></script>
+		<script src="/libs/angular/angular.js"></script>
+	</head>
+
+	<body>
+
+		<div ng-app="MyApp">
+			<div ng-controller="MyCtrl">
+				<div second-dir>
+					<div first-dir></div>
+				</div>
+			</div>
+		</div>
+
+		<script>
+
+			angular.module("MyApp", [])
+				.directive("firstDir", function() {
+					return {
+						require: ["^^secondDir","firstDir"],
+						controller: function($scope, $element, $attrs) {
+							this.almostTimeForLunch = function() {
+								console.log("getting hungry...");
+							};
+
+
+						},
+						link: function(scope, element, attrs, ctrls) {
+							if (ctrls[0]) {
+								ctrls[0].doSomething();
+
+								ctrls[0].getElement().append("more text...");
+							}
+
+							ctrls[1].almostTimeForLunch();
+
+						}
+
+					};
+				})
+				.directive("secondDir", function() {
+					return {
+						controller: function($scope, $element, $attrs) {
+							this.doSomething = function() {
+								console.log("did it");
+							};
+
+							this.getElement = function() {
+								return $element;
+							}
+						}
+					};
+				})
+				.controller("MyCtrl", function($scope) {
+
+
+
+				});
+
+		</script>
+
+	</body>
+
+</html>

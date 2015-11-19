@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+
+	<html>
+
+	<head>
+		<title>Welcome to Angular.js</title>
+		<script src="/libs/jquery/dist/jquery.js"></script>
+		<script src="/libs/angular/angular.js"></script>
+
+		<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+	  <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+	</head>
+
+	<body>
+
+		<div ng-app="MyApp">
+			<div ng-controller="MyCtrl">
+				{{profile.tag}}
+				<div>
+					<label>
+						Tags: <input hig-typeahead="availableTags" ng-model="profile.tag">
+					</label>
+				</div>
+				{{profile.product}}
+				<div>
+					<label>
+						Products: <input hig-typeahead="availableProducts" ng-model="profile.product">
+					</label>
+				</div>
+
+
+			</div>
+		</div>
+
+		<script>
+
+			// $(function() {
+		  //   var ;
+		  //   $( "#tags" ).autocomplete({
+		  //     source: availableTags
+		  //   });
+		  // });
+
+			angular.module("MyApp", [])
+				.directive("higTypeahead", function() {
+
+					return {
+						require: "ngModel",
+						link: function(scope, element, attrs, ctrl) {
+
+							console.dir(attrs);
+
+							element.autocomplete({
+								source: scope[attrs.higTypeahead]
+							});
+
+							function onBlur() {
+								ctrl.$setViewValue(element.val());
+							}
+
+							element.on("blur", onBlur);
+
+							scope.$on("$destroy", function() {
+								element.off("blur", onBlur);
+							});
+
+						}
+					}
+
+				})
+				.controller("MyCtrl", function($scope, $timeout) {
+
+					$scope.availableProducts = ["Life Insurance","Fire Insurance","Auto Insurance","Property Insurance","Vacation Insurance","Errors and Omissions Insurance"];
+
+					$scope.availableTags = [
+			      "ActionScript",
+			      "AppleScript",
+			      "Asp",
+			      "BASIC",
+			      "C",
+			      "C++",
+			      "Clojure",
+			      "COBOL",
+			      "ColdFusion",
+			      "Erlang",
+			      "Fortran",
+			      "Groovy",
+			      "Haskell",
+			      "Java",
+			      "JavaScript",
+			      "Lisp",
+			      "Perl",
+			      "PHP",
+			      "Python",
+			      "Ruby",
+			      "Scala",
+			      "Scheme"
+			    ];
+				});
+
+		</script>
+
+	</body>
+
+</html>

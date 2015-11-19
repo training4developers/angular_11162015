@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+
+	<html>
+
+	<head>
+		<title>Welcome to Angular.js</title>
+		<script src="/libs/jquery/dist/jquery.js"></script>
+		<script src="/libs/angular/angular.js"></script>
+	</head>
+
+	<body>
+
+		<div ng-app="MyApp">
+			<div ng-controller="MyCtrl">
+				<input ng-model="message">
+				<div my-dir="{{message}}">Content...</div>
+			</div>
+		</div>
+
+		<script>
+
+			angular.module("MyApp", [])
+				.directive("myDir", function() {
+					return {
+						link: function(scope, element, attrs) {
+							console.dir(attrs);
+							attrs.$addClass("bold-me");
+							console.log(attrs.$normalize("bold-me"));
+
+							attrs.$observe("myDir", function(newValue) {
+								console.log(newValue);
+							});
+						}
+					}
+				})
+				.controller("MyCtrl", function($scope) {
+					$scope.message = "Hi Everyone!";
+				});
+
+		</script>
+
+	</body>
+
+</html>

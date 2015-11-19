@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+
+	<html>
+
+	<head>
+		<title>Welcome to Angular.js</title>
+		<script src="/libs/jquery/dist/jquery.js"></script>
+		<script src="/libs/angular/angular.js"></script>
+	</head>
+
+	<body>
+
+		<div ng-app="MyApp">
+			<div ng-controller="MyCtrl">
+				<input ng-model="person.firstName" hig-required>
+			</div>
+		</div>
+
+		<script>
+
+			angular.module("MyApp", [])
+				.directive("higRequired", function() {
+
+					return {
+						require: "ngModel",
+						link: function(scope, element, attrs, ctrl) {
+
+							function validate(value) {
+								if (value == null || String(value).length === 0) {
+									ctrl.$setValidity("hig-required", false);
+									return;
+								} else {
+									ctrl.$setValidity("hig-required", true);
+									return value;
+								}
+							}
+
+							ctrl.$formatters.push(validate);
+							ctrl.$parsers.push(validate);
+
+						}
+					};
+
+				})
+				.controller("MyCtrl", function($scope) {
+
+
+
+				});
+
+		</script>
+
+	</body>
+
+</html>

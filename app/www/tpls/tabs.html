@@ -1,0 +1,10 @@
+<div class='tabs'>
+	<ul>
+		<li ng-class='{active:tab.tabId === activeTabId}' ng-repeat='tab in tabs'>
+			<a href='#' ng-click='activateTab(tab.tabId)'>{{tab.tabCaption}}</a>
+		</li>
+	</ul>
+	<div ng-if='tab.tabId === activeTabId' ng-repeat='tab in tabs'>
+		{{tab.tabContent}}
+	</div>
+</div>

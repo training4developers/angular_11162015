@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+
+	<html>
+
+	<head>
+		<title>Welcome to Angular.js</title>
+		<script src="/libs/jquery/dist/jquery.js"></script>
+		<script src="/libs/angular/angular.js"></script>
+	</head>
+
+	<body>
+
+		<div ng-app="MyApp">
+			<div ng-controller="MyCtrl">
+				{{message}}
+				<div my-dir subba="message" one-way="{{message | uppercase}}" click-me="doSomething()"></div>
+				{{message2}}
+				<div my-dir subba="message2" one-way="{{message2 | uppercase}}" click-me="doSomething()"></div>
+			</div>
+		</div>
+
+		<script>
+
+			angular.module("MyApp", [])
+				.directive("myDir", function() {
+
+					return {
+						scope: {
+							msg: "=subba",
+							oneWay: "@",
+							clickMe: "&"
+						},
+						template: "<input ng-model='msg'>{{oneWay}}<button>Click Me</button>",
+						link: function(scope, element, attrs) {
+							console.dir(scope);
+
+							function buttonClick() {
+								scope.$apply(function() {
+									scope.clickMe();
+								});
+							}
+
+							var button = element.find("button");
+							button.on("click", buttonClick);
+
+							scope.$on("$destroy", function() {
+								button.off("click", buttonClick);
+							})
+						}
+					};
+				})
+				.controller("MyCtrl", function($scope, $timeout) {
+					$scope.message = "Hello World!";
+					$scope.message2 = "Hello World!";
+
+					$scope.doSomething = function() {
+						console.log("did it!");
+					}
+
+
+				});
+
+		</script>
+
+	</body>
+
+</html>

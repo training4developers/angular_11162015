@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+
+	<html>
+
+	<head>
+		<title>Welcome to Angular.js</title>
+		<script src="/libs/jquery/dist/jquery.js"></script>
+		<script src="/libs/angular/angular.js"></script>
+	</head>
+
+	<body>
+
+		<div ng-app="MyApp">
+			<div ng-controller="MyCtrl">
+				<div simple-repeat="5" simple-bold>{{message}}</div>
+			</div>
+		</div>
+
+		<script>
+
+			angular.module("MyApp", [])
+				.directive("simpleRepeat", function($compile) {
+					return {
+						priority: 30,
+						terminal: true,
+						compile: function(tElement, tAttrs) {
+
+							var tpl = tElement[0].outerHTML;
+							tElement = tElement.replaceWith(document.createComment("simpleRepeat Placeholder"));
+
+							var pri = this.priority;
+
+							return function postLink(scope, element, attrs) {
+
+								var count = parseInt(attrs.simpleRepeat, 10);
+								while(count--) {
+									element.after($compile(tpl,null,pri)(scope));
+								}
+
+							}
+						}
+					};
+				})
+				.directive("simpleBold", function() {
+					return {
+						link: function(scope, element, attrs) {
+							element.css("font-weight", "bold");
+						}
+					};
+				})
+				.controller("MyCtrl", function($scope) {
+					$scope.message = "Hi Everyone!";
+				});
+
+		</script>
+
+	</body>
+
+</html>
