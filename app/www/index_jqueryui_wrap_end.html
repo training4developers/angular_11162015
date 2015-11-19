@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+
+	<html>
+
+	<head>
+		<title>Welcome to Angular.js</title>
+		<script src="/libs/jquery/dist/jquery.js"></script>
+		<script src="/libs/angular/angular.js"></script>
+
+		<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+	  <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+	</head>
+
+	<body>
+
+		<div ng-app="MyApp">
+			<div ng-controller="MyCtrl">
+
+				<div>
+					<label>
+						Profile Tag:
+						<input hig-typeahead="availableTags" ng-model="profile.tag">
+					</label>
+				</div>
+				<div>
+					Selected Profile Tag: {{profile.tag}}
+				</div>
+
+			</div>
+		</div>
+
+		<script>
+
+			angular.module("MyApp", [])
+				.directive("higTypeahead", function() {
+
+					return {
+						require: "ngModel",
+						link: function(scope, element, attrs, ctrl) {
+
+							element.autocomplete({
+					      source: scope[attrs.higTypeahead]
+					    });
+
+							function updateNgModel() {
+								ctrl.$setViewValue(this.value);
+							}
+
+							element.on("blur", updateNgModel);
+
+							scope.$on("$destroy", function() {
+								element.off("blur", updateNgModel);
+							});
+
+						}
+					}
+
+				})
+				.controller("MyCtrl", function($scope, $timeout) {
+
+					$scope.availableTags = [
+			      "ActionScript", "AppleScript", "Asp", "BASIC",
+			      "C", "C++", "Clojure", "COBOL", "ColdFusion",
+			      "Erlang", "Fortran", "Groovy", "Haskell", "Java",
+			      "JavaScript", "Lisp", "Perl", "PHP", "Python",
+			      "Ruby", "Scala", "Scheme"
+			    ];
+
+				});
+
+		</script>
+
+	</body>
+
+</html>
