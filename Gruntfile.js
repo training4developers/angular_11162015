@@ -1,5 +1,7 @@
 module.exports = function(grunt) {
 
+	"use strict";
+
 	grunt.initConfig({
 		webServer: {
 			port: 8080,

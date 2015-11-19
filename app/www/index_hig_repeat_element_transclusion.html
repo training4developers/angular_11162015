@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+
+	<html>
+
+	<head>
+		<title>Welcome to Angular.js</title>
+		<script src="/libs/jquery/dist/jquery.js"></script>
+		<script src="/libs/angular/angular.js"></script>
+	</head>
+
+	<body>
+
+		<div ng-app="MyApp">
+			<div ng-controller="MyCtrl">
+				<ul>
+					<li>First</li>
+					<li hig-repeat="color in colors | orderBy:'toString()'">{{color}}</li>
+					<li>Last</li>
+				</ul>
+			</div>
+		</div>
+
+		<script>
+
+			angular.module("MyApp", [])
+				.directive("higRepeat", function() {
+
+					return {
+						transclude:'element',
+						link: function(scope, element, attrs, ctrl, transclude) {
+
+							var tokens = attrs.higRepeat.split(" ");
+							var itemName = tokens[0];
+							var collectionName = tokens[2];
+							var collectionExpr = tokens.splice(2).join(" ");
+							var listElements = [];
+
+							scope.$watchCollection(collectionName, function(newList, oldList, scope) {
+
+								element.empty();
+
+								listElements.forEach(function(listElement) {
+									angular.element(listElement).scope().$destroy();
+									listElement.remove();
+								});
+								listElements = [];
+
+								var lastElement = element;
+
+								scope.$eval(collectionExpr).forEach(function(item) {
+
+									var childScope = scope.$new();
+									childScope[itemName] = item;
+
+									transclude(childScope, function(clone) {
+										lastElement.after(clone);
+										lastElement = clone;
+										listElements.push(lastElement);
+									});
+
+								});
+
+							});
+
+
+						}
+					};
+
+				})
+				.controller("MyCtrl", function($scope, $timeout) {
+					$scope.colors = ["red","white","blue","yellow"];
+
+					$timeout(function() {
+						$scope.colors.push("purple");
+					}, 2000)
+				});
+
+		</script>
+
+	</body>
+
+</html>
