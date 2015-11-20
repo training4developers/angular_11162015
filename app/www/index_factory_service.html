@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+
+	<html>
+
+	<head>
+		<title>Welcome to Angular.js</title>
+		<script src="/libs/jquery/dist/jquery.js"></script>
+		<script src="/libs/angular/angular.js"></script>
+	</head>
+
+	<body>
+
+		<div ng-app="MyApp">
+			<div ng-controller="MyCtrl">
+
+			</div>
+		</div>
+
+		<script>
+
+			angular.module("MyApp", [])
+				.constant("Url", "http://www.thehartford.com")
+				.factory("Widgets", function(Url) {
+
+					var _widgets = ["Widget 1","Widget 2","Widget 3"];
+
+					return {
+						getAll: function() {
+							console.log(Url);
+							return _widgets;
+						}
+					};
+
+				})
+				.service("Widgets2", function() {
+
+					var _widgets = ["Widget 1","Widget 2","Widget 3"];
+
+					this.getAll = function() {
+						return _widgets;
+					};
+
+				})
+				.config(function($provide) {
+
+					$provide.decorator("$log", function($delegate) {
+
+						var originalLog = $delegate.log;
+
+						$delegate.log = function(msg) {
+							originalLog("MyApp> " + msg);
+						}
+
+						//return $delegate;
+
+					});
+
+
+				})
+				.controller("MyCtrl", function($scope, $filter, Widgets, $log) {
+					console.dir(Widgets.getAll());
+					$log.log("hi everyone!");
+				});
+
+		</script>
+
+	</body>
+
+</html>
