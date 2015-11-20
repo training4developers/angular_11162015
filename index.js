@@ -1,13 +1,9 @@
-module.exports = function(grunt) {
+"use strict";
 
-	"use strict";
-
-	var
-		path = require("path"),
-		appContentFolder = path.join(process.cwd(), "app", "www"),
-		server = require("./app/server");
-
-	grunt.initConfig({
+var
+	path = require("path"),
+	appContentFolder = path.join(process.cwd(), "app", "www"),
+	app = require("./app/server")({
 		webServer: {
 			port: 8080,
 			wwwFolder: appContentFolder,
@@ -39,17 +35,21 @@ module.exports = function(grunt) {
         }
       }
     }
-	});
+	}),
+	cleanUpCalled = false;
 
-	grunt.registerTask("default", "start web server", function() {
+app.start();
 
-		var
-			app = server(grunt.config());
+function cleanUp() {
+	if (!cleanUpCalled) {
+		cleanUpCalled = true;
+		app.stop(function() {
+		  console.log("app server exiting...");
+			process.exit();
+		});
+	}
+}
 
-		this.async();
-
-		app.start();
-
-	});
-
-};
+process.on('exit', cleanUp);
+process.on('SIGINT', cleanUp);
+process.on('uncaughtException', cleanUp);
