@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+
+	<html>
+
+	<head>
+		<title>Welcome to Angular.js</title>
+		<link href="/libs/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+		<link href="/libs/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet">
+		<script src="/libs/jquery/dist/jquery.js"></script>
+		<script src="/libs/angular/angular.js"></script>
+		<script src="/libs/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+	</head>
+
+	<body>
+		<!-- https://qa-smallbizquote.thehartford.com/TrilliumService/lookupZipCode/06479 -->
+
+		<div ng-app="MyApp">
+			<div ng-controller="MyCtrl">
+				<div>
+					<input ng-model="zipCode">
+					<button ng-click="doLookup(zipCode)">Lookup Zip Code</button>
+				</div>
+				<div>
+					City: {{city}}<br>County: {{county}}
+				</div>
+			</div>
+		</div>
+
+		<script>
+
+			angular.module("MyApp", ["ui.bootstrap"])
+				.constant("ZipCodeLookupURL",
+					"https://qa-smallbizquote.thehartford.com/TrilliumService/lookupZipCode/")
+				.factory("GeoLocation", function($q) {
+					return {
+						getLocation: function() {
+
+							var d = $q.defer();
+
+							navigator.geolocation.getCurrentPosition(function(position) {
+								d.resolve(position.coords);
+							});
+
+							return d.promise;
+						}
+					}
+				})
+				.factory("GeoCoding", function(ZipCodeLookupURL, $q, $http) {
+					return {
+						getAddress(longitude, latitude) {
+
+							var d = $q.defer();
+
+							var xhr = new XMLHttpRequest();
+							xhr.addEventListener("readystatechange", function() {
+								if (xhr.status === 200 && xhr.readyState === 4) {
+									d.resolve(JSON.parse(xhr.responseText));
+								}
+							});
+
+							xhr.open("GET", ZipCodeLookupURL + "22026");
+							xhr.send();
+
+							return d.promise;
+
+						}
+					}
+				})
+				.controller("MyCtrl", function(GeoLocation, GeoCoding) {
+
+					GeoLocation.getLocation().then(function(results) {
+						console.log("get location");
+						return GeoCoding.getAddress(results.latitude, results.longitude);
+					}).then(function(results) {
+						console.log("get address");
+						console.log(results);
+					}).catch(function(results) {
+						console.log("some error occured...");
+					})
+
+					console.log("waiting for a zip code...");
+
+
+
+				});
+
+		</script>
+
+	</body>
+
+</html>
