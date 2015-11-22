@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+
+	<html>
+
+	<head>
+		<title>Welcome to Angular.js</title>
+		<link href="/libs/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+		<link href="/libs/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet">
+		<script src="/libs/jquery/dist/jquery.js"></script>
+		<script src="/libs/angular/angular.js"></script>
+		<script src="/libs/angular-ui-router/release/angular-ui-router.js"></script>
+		<script src="/libs/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+		<base href="/">
+	</head>
+
+	<body>
+		<div ng-app="MyApp" class="container-fluid">
+			<script id="home" type="text/ng-template">
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<th>Name</th>
+							<th>Color</th>
+							<th>Size</th>
+							<th>Qty</th>
+							<th>Action</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="widget in widgets">
+							<td>{{widget.name}}</td>
+							<td>{{widget.color}}</td>
+							<td>{{widget.size}}</td>
+							<td>{{widget.quantity}}</td>
+							<td>
+								<a ui-sref="edit({widgetId:widget._id})">Edit</a>
+								<a ui-sref="view({widgetId:widget._id})">View</a>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<button ng-click="createWidget()">Create Widget</button>
+			</script>
+			<script id="view" type="text/ng-template">
+				<div>
+					Name: {{widget.name}}
+				</div>
+				<div>
+					Description: {{widget.description}}
+				</div>
+				<div>
+					Color: {{widget.color}}
+				</div>
+				<div>
+					Size: {{widget.size}}
+				</div>
+				<div>
+					Quantity: {{widget.quantity}}
+				</div>
+				<button ng-click="editWidget()" class="btn btn-primary">Edit</button>
+				<button ng-click="returnToList()" class="btn btn-default">Return To List</button>
+			</script>
+			<script id="edit" type="text/ng-template">
+				<form novalidate name="widgetForm">
+					<div class="form-group">
+						<label>Name: <input ng-model="widget.name" class="form-input" name="widgetName"></label>
+					</div>
+					<div class="form-group">
+						<label>Description: <input ng-model="widget.description" class="form-input" name="widgetDescription"></label>
+					</div>
+					<div class="form-group">
+						<label>Color: <input ng-model="widget.color" class="form-input" name="widgetColor"></label>
+					</div>
+					<div class="form-group">
+						<label>Size: <input ng-model="widget.size" class="form-input" name="widgetSize"></label>
+					</div>
+					<div class="form-group">
+						<label>Quantity: <input ng-model="widget.quantity" class="form-input" name="widgetQuantity"></label>
+					</div>
+					<button ng-click="saveWidget()" class="btn btn-primary">Save</button>
+					<button ng-click="returnToList()" class="btn btn-default">Cancel</button>
+					<button ng-click="deleteWidget()" class="btn btn-danger" ng-if="widget._id">Delete</button>
+				</form>
+			</script>
+			<div class="row">
+				<div class="col-xs-12 col-md-offset-3 col-md-6">
+					<div ui-view></div>
+				</div>
+			</div>
+		</div>
+
+		<script>
+
+			angular.module("MyApp", ["ui.bootstrap","ui.router"])
+				.factory("Widgets", function($http) {
+
+					return {
+						getAll: function() {
+							return $http.get("/api/widgets");
+						},
+						get: function(widgetId) {
+							return $http.get("/api/widgets/" + encodeURIComponent(widgetId));
+						},
+						insert: function(widget) {
+							return $http.post("/api/widgets", widget);
+						},
+						update: function(widget) {
+							return $http.put("/api/widgets/" + encodeURIComponent(widget._id), widget);
+						},
+						delete: function(widgetId) {
+							return $http.delete("/api/widgets/" + encodeURIComponent(widgetId));
+						}
+					}
+
+				})
+				.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
+
+					$urlRouterProvider.otherwise("/");
+					$locationProvider.html5Mode(true);
+
+					var widgetResolver = {
+						"widgetResult": function(Widgets, $stateParams) {
+							if ($stateParams.widgetId) {
+								return Widgets.get($stateParams.widgetId);
+							} else {
+								return {};
+							}
+						}
+					};
+
+					$stateProvider
+						.state("home", {
+							url: "/",
+							templateUrl: "home",
+							controller: "HomeCtrl",
+							resolve: {
+								"widgetsResult": function(Widgets) {
+									return Widgets.getAll();
+								}
+							}
+						})
+						.state("view", {
+							url: "/widget/:widgetId",
+							templateUrl: "view",
+							controller: "ViewCtrl",
+							resolve: widgetResolver
+						})
+						.state("edit", {
+							url: "/widget/:widgetId/edit",
+							templateUrl: "edit",
+							controller: "EditCtrl",
+							resolve: widgetResolver
+						});
+
+				})
+				.controller("HomeCtrl", function($scope, widgetsResult, $state) {
+
+					$scope.widgets = widgetsResult.data;
+
+					$scope.createWidget = function() {
+						$state.go("edit", { widgetId: null });
+					}
+
+					$scope.$on("$stateChangeError", function() {
+						alert("Error trying to load widget.");
+					});
+				})
+				.controller("ViewCtrl", function($scope, widgetResult, $stateParams, $state) {
+
+					$scope.widget = widgetResult.data;
+
+					$scope.editWidget = function() {
+						$state.go("edit", { widgetId: $scope.widget.id });
+					};
+
+					$scope.returnToList = function() {
+						$state.go("home");
+					};
+
+				})
+				.controller("EditCtrl", function($scope, widgetResult, $state, $stateParams, Widgets) {
+
+					$scope.widget = widgetResult.data;
+
+					$scope.returnToList = function() {
+						$state.go("home");
+					};
+
+					$scope.saveWidget = function() {
+
+						var p = $scope.widget._id
+							? Widgets.update($scope.widget)
+							: Widgets.insert($scope.widget);
+
+						p.then(function() {
+							$state.go("home");
+						});
+					};
+
+					$scope.deleteWidget = function() {
+						if (confirm("Are you sure you want to delete the widget?")) {
+							Widgets.delete($scope.widget._id).then(function() {
+								$state.go("home");
+							});
+						}
+					};
+
+				});
+
+		</script>
+
+	</body>
+
+</html>

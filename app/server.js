@@ -71,8 +71,8 @@ module.exports = function(config) {
 	widgetsRouter.route("/widgets/:widgetId")
 		.get(function(req, res) {
 
-			res.status(500).end();
-			return;
+			// res.status(500).end();
+			// return;
 
 			WidgetModel.findById(req.params.widgetId,
 				function(err, result) {

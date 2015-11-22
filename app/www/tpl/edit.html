@@ -1,0 +1,20 @@
+<form novalidate name="widgetForm">
+	<div class="form-group">
+		<label>Name: <input ng-model="widget.name" class="form-input" name="widgetName"></label>
+	</div>
+	<div class="form-group">
+		<label>Description: <input ng-model="widget.description" class="form-input" name="widgetDescription"></label>
+	</div>
+	<div class="form-group">
+		<label>Color: <input ng-model="widget.color" class="form-input" name="widgetColor"></label>
+	</div>
+	<div class="form-group">
+		<label>Size: <input ng-model="widget.size" class="form-input" name="widgetSize"></label>
+	</div>
+	<div class="form-group">
+		<label>Quantity: <input ng-model="widget.quantity" class="form-input" name="widgetQuantity"></label>
+	</div>
+	<button ng-click="saveWidget()" class="btn btn-primary">Save</button>
+	<button ng-click="returnToList()" class="btn btn-default">Cancel</button>
+	<button ng-click="deleteWidget()" class="btn btn-danger" ng-if="widget._id">Delete</button>
+</form>
